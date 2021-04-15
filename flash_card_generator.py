@@ -8,17 +8,29 @@ from docx.shared import Pt
 import json
 import xlrd
 
-# Card sizes
-CARD_HEIGHT = 39
+# Card dimensions in mm
+CARD_HEIGHT = 36
 CARD_WIDTH = 80
 
-COLOR_SUMMARY_TABLE_HEADER = "#f3f3f3"
-
-WORKING_DIRECTORY   = os.getcwd()
-INPUT_FILE_NAME     = 'english_phrasal_verbs.xlsx'
-INPUT_FILE_PATH     = os.path.join(WORKING_DIRECTORY,  INPUT_FILE_NAME)
-
+COLOR_SUMMARY_TABLE_HEADER = "#f3f3f3"  # Light grey
 TABLE_STYLE = "Table Grid"
+
+# File names
+INPUT_FILE_NAME     = 'Input_Data.xlsx'         # Input file which shall contain 2 columns. The column "A" shall contain each text which goes on the front of the cards. Column "B" shall contain the items which goes on the back of the cards.
+TEMPLATE_FILE_NAME  = 'Template.docx'           # Template docx with pre-setted modifications. Use the original template to achieve proper results.
+OUTPUT_FILE_NAME    = 'Printable_Flash_Cards'   # The generated docs file will be named like this.
+
+# Creating file pathes
+WORKING_DIRECTORY   = os.getcwd()
+INPUT_FILE_PATH     = os.path.join(WORKING_DIRECTORY,  INPUT_FILE_NAME)
+TEMPLATE_FILE_PATH  = os.path.join(WORKING_DIRECTORY,  TEMPLATE_FILE_NAME)
+OUTPUT_FILE_PATH    = os.path.join(WORKING_DIRECTORY,  OUTPUT_FILE_NAME)
+
+
+
+#================================
+# Python Docx related functions
+#================================
 
 def set_repeat_table_header(row):
     """Sets property 'repeat header row on every new page' of table.
@@ -71,6 +83,61 @@ def set_row_height(row, height):
     """
     for row in table.rows:
         row.height = height
+
+def add_centered_row(row, content_of_cells):
+    """Adds a new row to a table. Every cell will hold centered align text. 
+
+    :param row: A list of cells of the row to be centered.
+    :type row: list
+    :param content_of_cells: The content of the centered row.
+    :type content_of_cells: list
+    """
+    for cell in range(len(row)):
+        paragraph = row[cell].paragraphs[0]
+        paragraph_format = paragraph.paragraph_format
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        
+        paragraph_format.space_before = Pt(3)
+        paragraph_format.space_after = Pt(3)
+        
+        cell_run = paragraph.add_run(content_of_cells[cell])
+        cell_run.bold = True
+
+def add_lefty_row(row, content_of_cells):
+    """Adds a new row to a table. Every cell will hold left aligned text. 
+
+    :param row: A list of cells of the row to be left aligned.
+    :type row: list
+    :param content_of_cells: The content of the lefty row.
+    :type content_of_cells: list
+    """
+    for cell in range(len(row)):
+        paragraph = row[cell].paragraphs[0]
+        paragraph_format = paragraph.paragraph_format
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        
+        paragraph_format.space_before = Pt(3)
+        paragraph_format.space_after = Pt(3)
+        
+        cell_run = paragraph.add_run(content_of_cells[cell])
+
+def add_heading_row(row, content_of_cells):
+    """Adds a heading row to a table. It basically sets a different style than the rest of the table has for the inputted row.
+
+    :param row: A list of cells of the header row
+    :type row: list
+    :param content_of_cells: The content of the header row.
+    :type content_of_cells: list
+    """
+    for cell in range(len(row)):
+        paragraph = row[cell].paragraphs[0]
+        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        cell_run = paragraph.add_run(content_of_cells[cell])
+        cell_run.bold = True
+
+#================================
+# Excel file processing
+#================================
 
 def process_excel_sheet(excel_file_path, sheet, heading=True):
     """Function opens and processes the rows of the inputted excel file's inputted sheet.
@@ -127,64 +194,14 @@ def process_excel_sheet(excel_file_path, sheet, heading=True):
 
     return return_dict
 
-
-def add_centered_row(row, content_of_cells):
-    """Adds a new row to a table. Every cell will hold centered align text. 
-
-    :param row: A list of cells of the row to be centered.
-    :type row: list
-    :param content_of_cells: The content of the centered row.
-    :type content_of_cells: list
-    """
-    for cell in range(len(row)):
-        paragraph = row[cell].paragraphs[0]
-        paragraph_format = paragraph.paragraph_format
-        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        
-        paragraph_format.space_before = Pt(3)
-        paragraph_format.space_after = Pt(3)
-        
-        cell_run = paragraph.add_run(content_of_cells[cell])
-        cell_run.bold = True
-
-def add_lefty_row(row, content_of_cells):
-    """Adds a new row to a table. Every cell will hold left aligned text. 
-
-    :param row: A list of cells of the row to be left aligned.
-    :type row: list
-    :param content_of_cells: The content of the lefty row.
-    :type content_of_cells: list
-    """
-    for cell in range(len(row)):
-        paragraph = row[cell].paragraphs[0]
-        paragraph_format = paragraph.paragraph_format
-        paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
-        
-        paragraph_format.space_before = Pt(3)
-        paragraph_format.space_after = Pt(3)
-        
-        cell_run = paragraph.add_run(content_of_cells[cell])
-
-def add_heading_row(row, content_of_cells):
-    """Adds a heading row to a table. It basically sets a different style than the rest of the table has for the inputted row.
-
-    :param row: A list of cells of the header row
-    :type row: list
-    :param content_of_cells: The content of the header row.
-    :type content_of_cells: list
-    """
-    for cell in range(len(row)):
-        paragraph = row[cell].paragraphs[0]
-        paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        cell_run = paragraph.add_run(content_of_cells[cell])
-        cell_run.bold = True
-
-
+#================================
+# Main functionality
+#================================
 
 def create_doc(input_dict):
 
     
-    document = Document(r"D:\python_scripts\flash_card_generator\Template.docx")
+    document = Document(TEMPLATE_FILE_PATH)
     
     input_dict_iterator = iter(input_dict)
 
@@ -273,8 +290,8 @@ def create_doc(input_dict):
 
     summary_table = document.add_table(rows=1, cols=2, style=TABLE_STYLE)
     header_row = [
-        'Column 1',
-        'Column 2'
+        'Front Item',
+        'Back Item'
     ]
     add_heading_row(summary_table.rows[0].cells, header_row)
 
@@ -304,20 +321,23 @@ def create_doc(input_dict):
     set_repeat_table_header(summary_table.rows[0])
 
 
-    document.save(r"D:\python_scripts\flash_card_generator\Printable_Flash_Cards.docx")
-
-
-
-
+    document.save(OUTPUT_FILE_PATH)
 
 
 def main():
+    
+    print("* Flash Card Generator *")
+    print("Script started...")
+    print("Processing input file: {}".format(INPUT_FILE_PATH))
+
     data = process_excel_sheet(INPUT_FILE_PATH, 0)
+
+    print("Generating output document...")
 
     create_doc(data)
 
-
-
+    print("Script finished.") 
+    print("See the generated file here: {}".format(OUTPUT_FILE_PATH))
 
 main()
 
