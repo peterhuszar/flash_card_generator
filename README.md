@@ -10,6 +10,13 @@ TBD
 
 ## How to use
 
+
+'''python
+INPUT_FILE_NAME     = 'Input_Data.xlsx'
+TEMPLATE_FILE_NAME  = 'Template.docx'
+OUTPUT_FILE_NAME    = 'Printable_Flash_Cards.docx'
+'''
+
 TBD
 
 ## Known bugs and errors
