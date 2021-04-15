@@ -191,17 +191,35 @@ def create_doc(input_dict):
     flash_card_front_content_list   = []
     flash_card_back_content_list    = []
 
+    
+    input_dict_last_key     = list(input_dict.keys())[-1]
+    last_key_reached = False
+
     for item in range(0, len(input_dict)):
 
         flash_item = next(input_dict_iterator)
         flash_item = input_dict[flash_item]
-        flash_item_keys     = list(flash_item.keys())
+        
         flash_item_values   = list(flash_item.values())
 
         flash_card_front_content_list.append(flash_item_values[0])
         flash_card_back_content_list.append(flash_item_values[1])
 
-        if len(flash_card_front_content_list) == 12 and len(flash_card_back_content_list) == 12:
+        if flash_item == input_dict_last_key:
+            last_key_reached = True
+
+        if last_key_reached:
+            empty_cells_front   = 12 - len(flash_card_front_content_list)
+            empty_cells_back    = 12 - len(flash_card_back_content_list)
+
+            for i in range(0, empty_cells_front + 1):
+                flash_card_front_content_list.append("-")
+            
+            for i in range(0, empty_cells_back + 1):
+                flash_card_back_content_list.append("-")
+            
+
+        if (len(flash_card_front_content_list) == 12 and len(flash_card_back_content_list) == 12):
 
             front_table = document.add_table(rows=0, cols=2, style=TABLE_STYLE)
 
@@ -243,8 +261,6 @@ def create_doc(input_dict):
 
             flash_card_front_content_list = []
             flash_card_back_content_list = []
-
-
 
         else:
             pass
