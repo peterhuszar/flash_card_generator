@@ -16,9 +16,9 @@ COLOR_SUMMARY_TABLE_HEADER = "#f3f3f3"  # Light grey
 TABLE_STYLE = "Table Grid"
 
 # File names
-INPUT_FILE_NAME     = 'Input_Data.xlsx'         # Input file which shall contain 2 columns. The column "A" shall contain each text which goes on the front of the cards. Column "B" shall contain the items which goes on the back of the cards.
-TEMPLATE_FILE_NAME  = 'Template.docx'           # Template docx with pre-setted modifications. Use the original template to achieve proper results.
-OUTPUT_FILE_NAME    = 'Printable_Flash_Cards'   # The generated docs file will be named like this.
+INPUT_FILE_NAME     = 'Input_Data.xlsx'                 # Input file which shall contain 2 columns. The column "A" shall contain each text which goes on the front of the cards. Column "B" shall contain the items which goes on the back of the cards.
+TEMPLATE_FILE_NAME  = 'Template.docx'                   # Template docx with pre-setted modifications. Use the original template to achieve proper results.
+OUTPUT_FILE_NAME    = 'Printable_Flash_Cards.docx'      # The generated docs file will be named like this.
 
 # Creating file pathes
 WORKING_DIRECTORY   = os.getcwd()
@@ -319,7 +319,6 @@ def create_doc(input_dict):
 
     # Repeat header row on pagebreak.
     set_repeat_table_header(summary_table.rows[0])
-
 
     document.save(OUTPUT_FILE_PATH)
 
