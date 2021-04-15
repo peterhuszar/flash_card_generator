@@ -15,7 +15,7 @@ pip install python-docx==0.8.10
 
 ## How to use
 
-1. Open ```Input_Data.xlsx```
+1. Open ```Input_Data.xlsx``` 
 2. Fill **Column A** with the text that you want to see on each card's **top side**
 3. Fill **Column B** with the text that you want to see on each card's **bottom side**
 4. When you are done save the file
@@ -23,11 +23,13 @@ pip install python-docx==0.8.10
 6. When the script is done a new file called ```Printable_Flash_Cards.docx``` will appear in the root folder
 7. Open the freshly generated .docx file, make sure it is exactly what you wanted
 8. Print the document as doublesided
-9. Enjoy your brand new flash cards 
+9.  Enjoy your brand new flash cards 
+
+*Note: Currently the ```Input_Data.xlsx``` is filled with example data, english phrasal verbs. Source: https://www.skypeenglishclasses.com/english-phrasal-verbs/*
 
 ### Content of the generated file
 
-The generated output file (Printable_Flash_Cards.docx) has the ollowing parts:
+The generated output file (Printable_Flash_Cards.docx) has the following parts:
 1. Cover page
 2. Printable cards
 3. A summary table with the content of every flash card.

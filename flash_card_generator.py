@@ -4,13 +4,13 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.shared import OxmlElement, qn
 from docx.shared import Mm
 from docx.shared import Pt
-# from docxcompose.composer import Composer
 import json
 import xlrd
 
 # Card dimensions in mm
-CARD_HEIGHT = 36
-CARD_WIDTH = 80
+CARD_HEIGHT     = 36
+CARD_WIDTH      = 80
+CARDS_PER_PAGE  = 12 # NUmber of cards on a single page
 
 COLOR_SUMMARY_TABLE_HEADER = "#f3f3f3"  # Light grey
 TABLE_STYLE = "Table Grid"
@@ -226,8 +226,8 @@ def create_doc(input_dict):
             last_key_reached = True
 
         if last_key_reached:
-            empty_cells_front   = 12 - len(flash_card_front_content_list)
-            empty_cells_back    = 12 - len(flash_card_back_content_list)
+            empty_cells_front   = CARDS_PER_PAGE - len(flash_card_front_content_list)
+            empty_cells_back    = CARDS_PER_PAGE - len(flash_card_back_content_list)
 
             for i in range(0, empty_cells_front + 1):
                 flash_card_front_content_list.append("-")
@@ -236,7 +236,7 @@ def create_doc(input_dict):
                 flash_card_back_content_list.append("-")
             
 
-        if (len(flash_card_front_content_list) == 12 and len(flash_card_back_content_list) == 12):
+        if (len(flash_card_front_content_list) == CARDS_PER_PAGE and len(flash_card_back_content_list) == CARDS_PER_PAGE):
 
             front_table = document.add_table(rows=0, cols=2, style=TABLE_STYLE)
 
