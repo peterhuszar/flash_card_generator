@@ -1,4 +1,4 @@
-# Flash Card Generator 
+# Flash Card Generator :zap::black_joker: 
 
 This Python script can be used to generate printable flashcards as a Microsoft Word document.
 
