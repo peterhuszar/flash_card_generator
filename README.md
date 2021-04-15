@@ -11,11 +11,11 @@ TBD
 ## How to use
 
 
-'''python
+```python
 INPUT_FILE_NAME     = 'Input_Data.xlsx'
 TEMPLATE_FILE_NAME  = 'Template.docx'
 OUTPUT_FILE_NAME    = 'Printable_Flash_Cards.docx'
-'''
+```
 
 TBD
 
